@@ -5,14 +5,14 @@ import com.tenyitamas.android.pokemonfinder.domain.model.PokemonInfo
 
 
 data class PokemonListState(
-    val state: PokemonListSealedClassState = PokemonListSealedClassState.Loading,
+    val state: PokemonListNetworkState = PokemonListNetworkState.Loading,
     val pokemons: List<PokemonInfo> = emptyList()
 )
 
-sealed class PokemonListSealedClassState() {
-    object Loading: PokemonListSealedClassState()
-    data class Success(val loadingMoreState: LoadingMoreState): PokemonListSealedClassState()
-    data class Error(val message: String?): PokemonListSealedClassState()
+sealed class PokemonListNetworkState() {
+    object Loading: PokemonListNetworkState()
+    data class Success(val loadingMoreState: LoadingMoreState): PokemonListNetworkState()
+    data class Error(val message: String?): PokemonListNetworkState()
 
     sealed class LoadingMoreState {
         object Loading: LoadingMoreState()

@@ -1,6 +1,5 @@
 package com.tenyitamas.android.pokemonfinder.presentation.list
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -8,12 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tenyitamas.android.pokemonfinder.domain.model.PokemonInfo
 import com.tenyitamas.android.pokemonfinder.domain.use_case.GetAllPokemonUseCase
-import com.tenyitamas.android.pokemonfinder.domain.use_case.GetPokemonInfoUseCase
 import com.tenyitamas.android.pokemonfinder.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -28,7 +24,7 @@ class PokemonListViewModel @Inject constructor(
 
     init {
         state = state.copy(
-            state = PokemonListSealedClassState.Loading,
+            state = PokemonListNetworkState.Loading,
             pokemons = emptyList()
         )
         loadPokemons()
@@ -38,9 +34,9 @@ class PokemonListViewModel @Inject constructor(
         when (event) {
             PokemonListEvent.OnLoadMore -> {
                 when (state.state) {
-                    is PokemonListSealedClassState.Error -> loadPokemons()
-                    PokemonListSealedClassState.Loading -> {} // Do nothing
-                    is PokemonListSealedClassState.Success -> loadPokemons()
+                    is PokemonListNetworkState.Error -> loadPokemons()
+                    PokemonListNetworkState.Loading -> {} // Do nothing
+                    is PokemonListNetworkState.Success -> loadPokemons()
                 }
             }
         }
@@ -48,14 +44,14 @@ class PokemonListViewModel @Inject constructor(
 
     private fun loadPokemons() {
 
-        if (state.pokemons.isEmpty()) {
-            state = state.copy(
-                state = PokemonListSealedClassState.Loading
+        state = if (state.pokemons.isEmpty()) {
+            state.copy(
+                state = PokemonListNetworkState.Loading
             )
         } else {
-            state = state.copy(
-                state = PokemonListSealedClassState.Success(
-                    loadingMoreState = PokemonListSealedClassState.LoadingMoreState.Loading
+            state.copy(
+                state = PokemonListNetworkState.Success(
+                    loadingMoreState = PokemonListNetworkState.LoadingMoreState.Loading
                 )
             )
         }
@@ -78,10 +74,10 @@ class PokemonListViewModel @Inject constructor(
 
                     state = state.copy(
                         state = if (state.pokemons.isEmpty()) {
-                            PokemonListSealedClassState.Error(res.message)
+                            PokemonListNetworkState.Error(res.message)
                         } else {
-                            PokemonListSealedClassState.Success(
-                                loadingMoreState = PokemonListSealedClassState.LoadingMoreState.Error(
+                            PokemonListNetworkState.Success(
+                                loadingMoreState = PokemonListNetworkState.LoadingMoreState.Error(
                                     message = res.message
                                 )
                             )
@@ -91,18 +87,18 @@ class PokemonListViewModel @Inject constructor(
                 is Resource.Loading -> {
                     state = state.copy(
                         state = if (state.pokemons.isEmpty()) {
-                            PokemonListSealedClassState.Loading
+                            PokemonListNetworkState.Loading
                         } else {
-                            PokemonListSealedClassState.Success(
-                                loadingMoreState = PokemonListSealedClassState.LoadingMoreState.Loading
+                            PokemonListNetworkState.Success(
+                                loadingMoreState = PokemonListNetworkState.LoadingMoreState.Loading
                             )
                         }
                     )
                 }
                 is Resource.Success -> {
                     state = state.copy(
-                        state = PokemonListSealedClassState.Success(
-                            loadingMoreState = PokemonListSealedClassState.LoadingMoreState.Success
+                        state = PokemonListNetworkState.Success(
+                            loadingMoreState = PokemonListNetworkState.LoadingMoreState.Success
                         ),
                         pokemons = state.pokemons.plus(res.data ?: emptyList())
                     )

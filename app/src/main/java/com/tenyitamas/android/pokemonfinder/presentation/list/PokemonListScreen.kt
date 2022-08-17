@@ -15,7 +15,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.tenyitamas.android.pokemonfinder.R
 import com.tenyitamas.android.pokemonfinder.domain.model.PokemonInfo
@@ -45,7 +44,7 @@ fun PokemonListScreen(
             .padding(spacing.spaceSmall)
     ) {
         when (state.state) {
-            is PokemonListSealedClassState.Error -> {
+            is PokemonListNetworkState.Error -> {
                 Text(
                     text = state.state.message ?: stringResource(id = R.string.unknown_error),
                     style = MaterialTheme.typography.h3,
@@ -70,13 +69,13 @@ fun PokemonListScreen(
                     )
                 }
             }
-            PokemonListSealedClassState.Loading -> {
+            PokemonListNetworkState.Loading -> {
                 CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.Center),
                     color = Color.Green
                 )
             }
-            is PokemonListSealedClassState.Success -> {
+            is PokemonListNetworkState.Success -> {
                 LazyVerticalGrid(
                     cells = GridCells.Fixed(2),
                     state = listState,
@@ -93,14 +92,14 @@ fun PokemonListScreen(
                 }
 
                 when (state.state.loadingMoreState) {
-                    is PokemonListSealedClassState.LoadingMoreState.Error -> {
+                    is PokemonListNetworkState.LoadingMoreState.Error -> {
                         Toast.makeText(
                             LocalContext.current,
                             state.state.loadingMoreState.message,
                             Toast.LENGTH_SHORT
                         ).show()
                     }
-                    PokemonListSealedClassState.LoadingMoreState.Loading -> {
+                    PokemonListNetworkState.LoadingMoreState.Loading -> {
                         CircularProgressIndicator(
                             modifier = Modifier
                                 .align(Alignment.BottomCenter)
@@ -108,7 +107,7 @@ fun PokemonListScreen(
                             color = Color.Green
                         )
                     }
-                    PokemonListSealedClassState.LoadingMoreState.Success -> {
+                    PokemonListNetworkState.LoadingMoreState.Success -> {
                         // Do nothing
                     }
                 }
