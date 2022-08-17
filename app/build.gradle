@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -60,4 +62,35 @@ dependencies {
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_ui_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_ui_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_ui_version"
+
+    // Dagger-hilt
+    implementation "com.google.dagger:hilt-android:$dagger_hilt_version"
+    kapt "com.google.dagger:hilt-compiler:$dagger_hilt_version"
+
+    // Retrofit
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-moshi:$retrofit_version"
+    implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
+
+    //gson
+    implementation 'com.google.code.gson:gson:2.3'
+    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
+
+    // Moshi
+    kapt "com.squareup.moshi:moshi-kotlin:$moshiVersion"
+
+    //Coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
+
+    // Navigation Compose
+    implementation "androidx.hilt:hilt-navigation-compose:$hiltNavigationComposeVersion"
+
+    // Coil
+    implementation "io.coil-kt:coil-compose:$coilVersion"
+    implementation "io.coil-kt:coil-gif:$coilVersion"
+    implementation "io.coil-kt:coil-compose:$coilVersion"
+
+    //Collapsing toolbar
+    implementation "me.onebone:toolbar-compose:2.3.4"
 }

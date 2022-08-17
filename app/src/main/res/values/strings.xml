@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">PokemonFinder</string>
+    <string name="unknown_error">Unknown error occurred</string>
+    <string name="could_not_load_more">Couldn\'t load more Pokemon</string>
+    <string name="retry">Retry</string>
+    <string name="weight">Weight</string>
+    <string name="height">Height</string>
+    <string name="shown_abilities">Shown Abilities</string>
 </resources>
